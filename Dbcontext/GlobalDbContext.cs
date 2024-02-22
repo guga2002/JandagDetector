@@ -1,4 +1,4 @@
-﻿using ManageLIbrary.Models;
+﻿using db.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace ManageLIbrary.Dbcontexti
@@ -11,6 +11,15 @@ namespace ManageLIbrary.Dbcontexti
         }
 
         public DbSet<Chanell> chanells { get; set; }
+        public DbSet<ChanellSource> chnaellSource { get; set; }
+        public DbSet<Desclamber> Desclambers { get; set; }
+        public DbSet<Packages> Packgages { get; set; }
+
+        public DbSet<Reciever> Recievers { get; set; }
+
+        public DbSet<Status> Status { get; set; }
+
+        public DbSet<Transcoder> Transcoder { get; set; }
 
     }
 }

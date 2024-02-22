@@ -1,5 +1,7 @@
 ﻿
 
+using db.Models;
+
 namespace ManageLIbrary.Context
 {
     public class GloabalContext

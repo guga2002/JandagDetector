@@ -2,10 +2,10 @@
 using System.Net;
 using ManageLIbrary.Context;
 using System.Text.RegularExpressions;
-using ManageLIbrary.Models;
 using ManageLIbrary.Dbcontexti;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
+using db.Models;
+
 
 namespace ManageLIbrary.Services
 {
@@ -44,7 +44,7 @@ namespace ManageLIbrary.Services
 
         }
 
-        private void sendmessage(List<Chanell> orasi, List<Chanell> asi, List<Chanell> asati, List<Chanell> asoci, List<Chanell> asocdaati,List<string> ati , List<string> oci, List<string> ocdaati, List<string> ormoci, List<string> ormocdaati, List<string> samocdaati,List<string> ipsilk, List<string> muxianis, List<string> geocel,List<string>desc80,List<string> dsc90,List<string> mult230)
+        private void sendmessage(List<ChanellSource> orasi, List<ChanellSource> asi, List<ChanellSource> asati, List<ChanellSource> asoci, List<ChanellSource> asocdaati,List<string> ati , List<string> oci, List<string> ocdaati, List<string> ormoci, List<string> ormocdaati, List<string> samocdaati,List<string> ipsilk, List<string> muxianis, List<string> geocel,List<string>desc80,List<string> dsc90,List<string> mult230)
         {
             if(ipsilk.Count<=14&&muxianis.Count<=13&&geocel.Count<=10)
             {
@@ -63,7 +63,7 @@ namespace ManageLIbrary.Services
                 //silksi cudi ambaviaa
                 alertsaswrafo++;
             }
-            else if(muxianis.Count>3)
+            else if(muxianis.Count>14)
             {
                 if (alertsaswrafo <= 4)
                 {
@@ -255,10 +255,10 @@ namespace ManageLIbrary.Services
                 shed = 0;
             }
         }
-        private List<Chanell> doparse(List<string> arxs, int ricx)
+        private List<ChanellSource> doparse(List<string> arxs, int ricx)
         {
-            List<Chanell> errors = new List<Chanell>();
-            Chanell chanell;
+            List<ChanellSource> errors = new List<ChanellSource>();
+            ChanellSource chanell;
            
             foreach (var item in arxs)
             {
@@ -272,7 +272,7 @@ namespace ManageLIbrary.Services
 
                 if (match.Success && (portMatch.Success||video.Success))
                 {
-                    chanell = new Chanell();
+                    chanell = new ChanellSource();
                     string cardNumber = match.Groups[1].Value;
                     string portNumber = portMatch.Groups[1].Value;
                     string vid = video.Groups[1].Value;
@@ -280,28 +280,28 @@ namespace ManageLIbrary.Services
                     int cardnum;
                     int portpars;
                     int videopars;
-                    Chanell chan;
+                    ChanellSource chan;
                     if(int.TryParse(cardNumber,out cardnum))
                     {
-                        chanell.Card = cardnum;
+                        chanell.Reciever.Card = cardnum;
                         if (int.TryParse(portNumber,out portpars))
                         {
-                            chanell.Port = portpars;
+                            chanell.Reciever.Port = portpars;
                         }
                         else if(int.TryParse(vid,out videopars))
                         {
-                            chanell.Port = videopars;
+                            chanell.Reciever.Port = videopars;
                         }
-                        chanell.EmrCode = ricx;
+                        chanell.Reciever.Emr = ricx;
 
-                       var name=db.chanells.Where(io=>io.Card==chanell.Card&&io.Port==chanell.Port&&io.EmrCode==chanell.EmrCode).FirstOrDefault();
+                       var name=db.chnaellSource.Where(io=>io.Reciever.Card==chanell.Reciever.Card&&io.Reciever.Port==chanell.Reciever.Port&&io.Reciever.Emr==chanell.Reciever.Emr).FirstOrDefault();
                        
                         if(name!=null)
-                        chanell.ChanellName = name.ChanellName;
+                        chanell.Name = name.Name;
 
 
                     }
-                    chanell.ErrorMesage = item;
+                    //chanell.ErrorMesage = item;
 
 
                     errors.Add(chanell);

@@ -3,6 +3,7 @@ using ManageLIbrary.Dbcontexti;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ManageLIbrary.Migrations
 {
     [DbContext(typeof(GlobalDbContext))]
-    partial class GlobalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240222101013_mgrts")]
+    partial class mgrts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +23,21 @@ namespace ManageLIbrary.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ChanellChanellSource", b =>
+                {
+                    b.Property<int>("SourcesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("chanellId")
+                        .HasColumnType("int");
+
+                    b.HasKey("SourcesId", "chanellId");
+
+                    b.HasIndex("chanellId");
+
+                    b.ToTable("ChanellChanellSource");
+                });
 
             modelBuilder.Entity("db.Models.Chanell", b =>
                 {
@@ -66,8 +84,6 @@ namespace ManageLIbrary.Migrations
                         .HasColumnName("SourceStrean");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ChanellId");
 
                     b.ToTable("ChanellSources");
                 });
@@ -216,15 +232,19 @@ namespace ManageLIbrary.Migrations
                     b.ToTable("Transcoders");
                 });
 
-            modelBuilder.Entity("db.Models.ChanellSource", b =>
+            modelBuilder.Entity("ChanellChanellSource", b =>
                 {
-                    b.HasOne("db.Models.Chanell", "chanell")
-                        .WithMany("Sources")
-                        .HasForeignKey("ChanellId")
+                    b.HasOne("db.Models.ChanellSource", null)
+                        .WithMany()
+                        .HasForeignKey("SourcesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("chanell");
+                    b.HasOne("db.Models.Chanell", null)
+                        .WithMany()
+                        .HasForeignKey("chanellId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("db.Models.Desclamber", b =>
@@ -285,8 +305,6 @@ namespace ManageLIbrary.Migrations
             modelBuilder.Entity("db.Models.Chanell", b =>
                 {
                     b.Navigation("Packages");
-
-                    b.Navigation("Sources");
                 });
 
             modelBuilder.Entity("db.Models.ChanellSource", b =>
