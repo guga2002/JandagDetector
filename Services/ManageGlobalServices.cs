@@ -44,7 +44,7 @@ namespace ManageLIbrary.Services
 
         }
 
-        private void sendmessage(List<ChanellSource> orasi, List<ChanellSource> asi, List<ChanellSource> asati, List<ChanellSource> asoci, List<ChanellSource> asocdaati,List<string> ati , List<string> oci, List<string> ocdaati, List<string> ormoci, List<string> ormocdaati, List<string> samocdaati,List<string> ipsilk, List<string> muxianis, List<string> geocel,List<string>desc80,List<string> dsc90,List<string> mult230)
+        private void sendmessage(List<Reciever> orasi, List<Reciever> asi, List<Reciever> asati, List<Reciever> asoci, List<Reciever> asocdaati,List<string> ati , List<string> oci, List<string> ocdaati, List<string> ormoci, List<string> ormocdaati, List<string> samocdaati,List<string> ipsilk, List<string> muxianis, List<string> geocel,List<string>desc80,List<string> dsc90,List<string> mult230)
         {
             if(ipsilk.Count<=14&&muxianis.Count<=13&&geocel.Count<=10)
             {
@@ -255,10 +255,10 @@ namespace ManageLIbrary.Services
                 shed = 0;
             }
         }
-        private List<ChanellSource> doparse(List<string> arxs, int ricx)
+        private List<Reciever> doparse(List<string> arxs, int ricx)
         {
-            List<ChanellSource> errors = new List<ChanellSource>();
-            ChanellSource chanell;
+            List<Reciever> errors = new List<Reciever>();
+            Reciever chanell;
            
             foreach (var item in arxs)
             {
@@ -272,7 +272,7 @@ namespace ManageLIbrary.Services
 
                 if (match.Success && (portMatch.Success||video.Success))
                 {
-                    chanell = new ChanellSource();
+                    chanell = new Reciever();
                     string cardNumber = match.Groups[1].Value;
                     string portNumber = portMatch.Groups[1].Value;
                     string vid = video.Groups[1].Value;
@@ -283,21 +283,21 @@ namespace ManageLIbrary.Services
                     ChanellSource chan;
                     if(int.TryParse(cardNumber,out cardnum))
                     {
-                        chanell.Reciever.Card = cardnum;
+                        chanell.Card = cardnum;
                         if (int.TryParse(portNumber,out portpars))
                         {
-                            chanell.Reciever.Port = portpars;
+                            chanell.Port = portpars;
                         }
                         else if(int.TryParse(vid,out videopars))
                         {
-                            chanell.Reciever.Port = videopars;
+                            chanell.Port = videopars;
                         }
-                        chanell.Reciever.Emr = ricx;
+                        chanell.Emr = ricx;
 
-                       var name=db.chnaellSource.Where(io=>io.Reciever.Card==chanell.Reciever.Card&&io.Reciever.Port==chanell.Reciever.Port&&io.Reciever.Emr==chanell.Reciever.Emr).FirstOrDefault();
+                       var name=db.Recievers.Where(io=>io.Card==chanell.Card&&io.Port==chanell.Port&&io.Emr==chanell.Emr).FirstOrDefault();
                        
                         if(name!=null)
-                        chanell.Name = name.Name;
+                        chanell.Emr = name.Emr;
 
 
                     }
